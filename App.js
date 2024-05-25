@@ -9,7 +9,9 @@ export default function App() {
   const addNumberHandler = (number) => {
     setDisplayText((currentText) => {
       const lastChar = currentText.slice(-1);
-      
+      if (currentText === 'Error') {
+        currentText = '';} // Clear the "Error" message
+     
       // prenvent multiple and divide operatin from being the first character
       if (currentText === '' && (number === '/' || number === '*')) {
         return currentText;
@@ -35,7 +37,11 @@ export default function App() {
   const calculateResult = () => {
     try {
       const result = eval(displayText);
-      setDisplayText(parseFloat(result.toString()).toString().slice(0, 12));  // Limit result to 12 characters
+      if (result === Infinity || result === -Infinity) {            // For
+        setDisplayText('Error');
+      } else {
+        setDisplayText(parseFloat(result.toString()).toString().slice(0, 12)); // Limit result to 12 characters
+      }
     } catch (error) {
       setDisplayText('Error');
     }
@@ -71,7 +77,7 @@ export default function App() {
           <CalculatorButton style={styles.operationButton} title="*" onPress={() => addNumberHandler('*')} />
         </View>
         <View style={styles.buttonContainer}>
-          <CalculatorButton title="AC" style={styles.operationButton} onPress={clearNumberHandler} />
+          <CalculatorButton title="C" style={styles.operationButton} onPress={clearNumberHandler} />
           <CalculatorButton title="0" onPress={() => addNumberHandler('0')} />
           <CalculatorButton title="." onPress={() => addNumberHandler('.')} />
           <CalculatorButton style={styles.operationButton} title="/" onPress={() => addNumberHandler('/')} />
