@@ -9,11 +9,12 @@ export default function App() {
   const addNumberHandler = (number) => {
     setDisplayText((currentText) => {
       const lastChar = currentText.slice(-1);
-
+      
+      // prenvent multiple and divide operatin from being the first character
       if (currentText === '' && (number === '/' || number === '*')) {
         return currentText;
       }
-
+      // // Prevent multiple operators or dots in a row
       if (
         (isOperator(lastChar) && isOperator(number)) ||
         (lastChar === '.' && number === '.')
@@ -21,23 +22,26 @@ export default function App() {
         return currentText;
       }
 
-      return currentText.length < 12 ? currentText + number : currentText;
+      return currentText.length < 12 ? currentText + number : currentText; // display maximum 12 characters
     });
   };
 
+  // clear all character 
   const clearNumberHandler = () => {
     setDisplayText('');
   };
 
+  // do the calculation
   const calculateResult = () => {
     try {
       const result = eval(displayText);
-      setDisplayText(result.toString().slice(0, 12));
+      setDisplayText(parseFloat(result.toString()).toString().slice(0, 12));  // Limit result to 12 characters
     } catch (error) {
       setDisplayText('Error');
     }
   };
 
+  // Check for an operator or not
   const isOperator = (char) => {
     return ['+', '-', '*', '/'].includes(char);
   };
